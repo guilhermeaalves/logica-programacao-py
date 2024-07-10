@@ -1,74 +1,40 @@
-# menu = {
-#        'Menu' : '',
-#        1. : 'Adicionar Tarefa',
-#        2. : 'Remover Tarefa',
-#        3. : 'Marcar Uma Tarefa Como Concluída',
-#        4. : 'Listar Todas as Tarefas',
-#        5. : 'Listar Tarefas Concluídas',
-#        6. : 'Listar Tarefas Não Concluídas',
-#        7. : 'Sair'
-# }
-
-# print(menu)
-
-print('''
-       Menu:
-       1. Adicionar Tarefa
-       2. Remover Tarefa
-       3. Marcar Uma Tarefa Como Concluída
-       4. Listar Todas as Tarefas
-       5. Listar Tarefas Concluídas
-       6. Listar Tarefas Não Concluídas
-       7. Sair''')
-
+import moduloMenu as menu
+import moduloAdiciona as add
+import moduloRemove as rm
 
 tarefas_dic = {}
 
+menu
+
 def menu_tarefas ():
-    opcao = input('Escolha uma opção: ')
 
-    while opcao == 'sair':
-        menu_tarefas()
-        break
-    if opcao == '1':
-        adiciona_tarefa()
-    elif opcao == '2':
-        remove_tarefa()
+    while True:
+        opcao = input('Selecione uma opção: ')
 
-
-def remove_tarefa ():
-    print (tarefas_dic)
-    rm = input('Digite o número de qual tarefa você deseja remover: ')
-
-    while rm != 'sair':
-        remove_tarefa()
-        break
-    print(f'Sua tarefa foi removida com sucesso {tarefas_dic}')
-
-    tarefas_dic.pop(rm)
-
-    respostaFinal = input('Você deseja remover mais alguma tarefa? Se sim digite: 1, se não digite: 2, caso você deseja voltar ao menu, digite: 3')
-
-    while respostaFinal != '2':
-        remove_tarefa()
-        break
-    while respostaFinal == '3':
-        menu_tarefas()
-        break
-
-    # tarefas.
-
-def adiciona_tarefa ():
-    adicao_num = input('Digite o número para classificar a sua tarefa: ')
-    adicao_tarefa = input('Digite o nome da tarefa para adicionar: ')
-
-    if adicao_num == '':
-        while adicao_num == '':
-            adicao_num
-    else
-        while 
-
-    tarefas_dic.update({adicao_num : adicao_tarefa})
-    print(f'Sua tarefa foi adicionada à lista com sucesso {tarefas_dic}')
+        if opcao == '1':
+            print('\033[32mAdicionar Tarefa selecionada.\033[0m')
+            add.adiciona_tarefa()
+            
+        elif opcao == '2':
+            print('\033[31mRemover Tarefa selecionada.\033[0m')
+            rm.remove_tarefa()
+            
+        elif opcao == '3':
+            print('\033[32mMarcar Uma Tarefa Como Concluída selecionada.\033[0m')
+            
+        elif opcao == '4':
+            print('\033[36mListar Todas as Tarefas selecionada.\033[0m')
+           
+        elif opcao == '5':
+            print('\033[32mListar Tarefas Concluídas selecionada.\033[0m')
+            
+        elif opcao == '6':
+            print('\033[33mListar Tarefas Não Concluídas selecionada.\033[0m')
+            
+        elif opcao == '7':
+            print('\033[31mSaindo...por isso a média do qi brasileiro é de 83 pontos\033[0m')
+            break
+        else:
+            print('\033[31mOpção inválida. Tente novamente, ou digite 7 para sair.\033[0m')
 
 menu_tarefas () 
