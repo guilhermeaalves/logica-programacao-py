@@ -1,6 +1,17 @@
+import json
 import moduloMenu as menu
 
-tarefas_dic = {}
+def abrirArquivo(nomeArquivo):
+    try:
+        with open(nomeArquivo, 'r') as arquivo:
+            return json.load(arquivo)
+    except FileNotFoundError:
+        print('Arquivo não encontrado.')
+        return {}
+    
+def salvarArquivo(nomeArquivo, dados):
+    with open(nomeArquivo, 'w') as arquivo:
+        json.dump(dados, arquivo, indent=4)
 
 menu
 
@@ -19,106 +30,107 @@ def menu_tarefas ():
             
         elif opcao == '3':
             print('\033[32mMarcar Uma Tarefa Como Concluída selecionada.\033[0m')
+            tarefa_concluida()
+
             
-        elif opcao == '4':
-            print('\033[36mListar Todas as Tarefas selecionada.\033[0m')
+        # elif opcao == '4':
+        #     print('\033[36mListar Todas as Tarefas selecionada.\033[0m')
            
-        elif opcao == '5':
-            print('\033[32mListar Tarefas Concluídas selecionada.\033[0m')
+        # elif opcao == '5':
+        #     print('\033[32mListar Tarefas Concluídas selecionada.\033[0m')
             
-        elif opcao == '6':
-            print('\033[33mListar Tarefas Não Concluídas selecionada.\033[0m')
+        # elif opcao == '6':
+        #     print('\033[33mListar Tarefas Não Concluídas selecionada.\033[0m')
             
-        elif opcao == '7':
-            print('\033[31mSaindo...por isso a média do qi brasileiro é de 83 pontos\033[0m')
-            break
+        # elif opcao == '7':
+        #     print('\033[31mSaindo...por isso a média do qi brasileiro é de 83 pontos\033[0m')
+        #     break
         else:
             print('\033[31mOpção inválida. Tente novamente, ou digite 7 para sair.\033[0m')
 
+
 def adiciona_tarefa ():
-    # adicao_num = input('Digite um número para a sua tarefa: ')
 
+    try:
+        nomeArquivo = 'python/Exercícios/Exercício_3/dados.json'
+        dados = abrirArquivo(nomeArquivo)
 
-    # while adicao_num == '':
-    #     while resposta != '3':
-    #         resposta = input('Você não digitou um número para classificar a sua tarefa, por favor digite um número para classificar a sua tarefa, digite 3 para encerrar ou digite 2 para voltar ao menu: ')
-    #         adiciona_tarefa()
-    #         break
-        
-    # while adicao_num != '':
-    #     adicao_tarefa = input('Digite a sua tarefa: ')
-    #     break
-    
-    # while adicao_tarefa != '':
-    #     tarefas_dic[adicao_num] = adicao_tarefa
-    #     print(f'\033[32mTarefa adicionada com sucesso!{tarefas_dic}\033[0m')
-    #     break
-
-    # respostaFinal = input('Você deseja adicionar mais alguma tarefa? Se sim digite: 1, se não digite: 2, caso você deseja voltar ao menu, digite: 3 > ')
-
-    # while respostaFinal and resposta == '1':
-    #     adiciona_tarefa()
-    #     break
-    # while respostaFinal == '2':
-    #     break
-    # while respostaFinal and resposta == '3':
-    #     menu
-    #     menu_tarefas()
-    #     break
-
-    while True:
         adicao_num = input('Digite um número para a sua tarefa: ')
+        adicao_tarefa = input('Digite a descrição da sua tarefa: ')
+        adicao_status = input('Digite um status para a sua tarefa: ')
 
-        if adicao_num == '':
-            print('\033[31mVocê não digitou um número para classificar a sua tarefa, por favor digite um número para classificar a sua tarefa ou, digite sair para encerrar o programa ou digite menu para voltar ao menu: \033[0m')
-        if adicao_num == 'sair':
-            break
-        elif adicao_num == 'menu':
-            menu_tarefas()
-            break
+        if adicao_num in dados:
+            print("\033[31mErro: Tarefa com este número já existe.\033[0m")
         
-        else:
-            adicao_tarefa = input('Digite a sua tarefa: ')
-            tarefas_dic[adicao_num] = adicao_tarefa
-            print(f'\033[32mTarefa adicionada com sucesso!{tarefas_dic}\033[0m')
-            
+        dados[int(adicao_num)] = adicao_tarefa, adicao_status
+        salvarArquivo(nomeArquivo, dados)
+        print(f"\033[32mTarefa {adicao_tarefa} adicionada com sucesso!\033[0m")
 
-            if adicao_tarefa != '':
-                tarefas_dic.update({adicao_num : adicao_tarefa})
+    except ValueError:
 
-            if adicao_tarefa == '':
-                print('\033[31mVocê não digitou uma tarefa, por favor digite uma tarefa para adicionar, ou digite 3 para encerrar ou digite 2 para voltar ao menu: \033[0m')
-                adiciona_tarefa()
-                break
+        print('\033[31mErro: Número inválido.\033[0m')
+        
+    except Exception as e:
 
-            elif adicao_tarefa == 'sair':
-                break
+        print(f"\033[31mErro ao adicionar tarefa: {e}\033[0m")
 
-            elif adicao_tarefa == 'menu':
-                menu_tarefas()
-                break
+    finally:
+        menu_tarefas()
 
 def remove_tarefa ():
-    print (tarefas_dic)
-    rm = input('Digite um número de qual tarefa você deseja remover: ')
 
-    while rm != '2':
-        remove_tarefa()
-        print(f'Sua tarefa foi removida com sucesso {tarefas_dic}')
-        break
+    nomeArquivo = 'python/Exercícios/Exercício_3/dados.json'
     
-    while rm == '':
-        print('Você não digitou um número para remover uma tarefa, por favor digite um número para classificar a sua tarefa, ou digite sair, para encerrar o programa: ')
+    dados = abrirArquivo(nomeArquivo)
 
-    tarefas_dic.pop(rm)
+    if not dados:
+        print("Nenhuma tarefa encontrada.")
+        return menu_tarefas()
 
-    respostaFinal = input('Você deseja remover mais alguma tarefa? Se sim digite: 1, se não digite: 2, caso você deseja voltar ao menu, digite: 3 > ')
+    print("\nTarefas atuais:")
+    for num, descricao, status in dados.items():
+        print(f"{num}. {descricao} {status}")
 
-    while respostaFinal == '1':
-        remove_tarefa()
-        break
-    while respostaFinal == '3':
-        menu_tarefas()
-        break
+    try:
+        rm = int(input('Digite o número da tarefa que você deseja remover: '))
+        rm_str = str(rm)
 
-menu_tarefas ()
+        if rm_str not in num:
+            print("\033[31mErro: Número inválido.\033[0m")
+        else:
+            dados.pop(str(rm))
+            salvarArquivo(nomeArquivo, dados)
+            print("\033[32mTarefa removida com sucesso!\033[0m")
+
+    except ValueError:
+        print("\033[31mErro: Número inválido.\033[0m")
+
+    except Exception as e:
+        print("\033[31mErro ao remover tarefa: {e}\033[0m")
+
+def tarefa_concluida ():
+        
+    nomeArquivo = 'python/Exercícios/Exercício_3/dados.json'
+    
+    dados = abrirArquivo(nomeArquivo)
+
+    if not dados:
+        print("Nenhuma tarefa encontrada.")
+        return menu_tarefas()
+
+    print("\nTarefas atuais:")
+    for num, descricao in dados.items():
+        print(f"{num}. {descricao}")
+
+        
+        try:
+            st = int(input('Digite o número da tarefa a ser concluída: '))
+            dados.get(st)
+            if st == 'concluida':
+                print("\033[31mErro: tarefa já está marcada como concluída.\033[0m")
+
+        except ValueError:
+            print("\033[31mErro: Número inválido.\033[0m")
+
+    
+menu_tarefas()
